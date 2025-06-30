@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rent Space</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+  <link rel="stylesheet" href="home.css" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-left">
+    <a href="#" class="logo">
+      <img src="./properties/logo.jpg" alt="Rent Space Logo" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="roomate.html">Find Roommate</a></li>
+    </ul>
+  </div>
+  <div class="navbar-right">
+    <a href="login.html" class="btn logout-btn">Logout</a>
+    <a href="upi2.html" class="btn">Create Post</a>
+    <div class="user-menu">
+      <button id="menu-dropdown"><i class="fas fa-user-circle"></i></button>
+      <div class="dropdown-content">
+        <a href="#">Account</a>
+        <a href="#">Settings</a>
+        <a href="login.html">Logout</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Search Bar -->
+<section class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search for rooms, locations, or amenities..." />
+  <button onclick="searchRooms()">Search</button>
+</section>
+
+<!-- Toolbar -->
+<div class="toolbar-buttons">
+  <button id="sortToggleBtn">Sort</button>
+  <button id="filterToggleBtn">Filter</button>
+</div>
+
+<!-- Sort Section -->
+<div id="sortSection" style="display:none;">
+  <h3>Sort Options</h3>
+  <select id="sortBy" onchange="sortRooms()">
+    <option value="default">Default</option>
+    <option value="lowToHigh">Price: Low to High</option>
+    <option value="highToLow">Price: High to Low</option>
+  </select>
+</div>
+
+<!-- Filter Sidebar -->
+<aside id="filterSidebar" style="display:none;">
+  <h3>Filters</h3>
+  <div class="filter-group">
+    <label>Location</label>
+    <select id="locationFilter" onchange="searchRooms()">
+      <option value="">All</option>
+      <option value="sector-62">Sector 62</option>
+      <option value="sector-15">Sector 15</option>
+      <option value="noida-ext">Noida Extension</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Budget (Rs)</label>
+    <div class="range-inputs">
+      <input type="number" id="minPrice" placeholder="Min" />
+      <input type="number" id="maxPrice" placeholder="Max" />
+    </div>
+  </div>
+  <div class="filter-group">
+    <label>Type</label>
+    <select id="typeFilter">
+      <option value="">All</option>
+      <option value="1rk">1 RK</option>
+      <option value="1bhk">1 BHK</option>
+      <option value="2bhk">2 BHK</option>
+    </select>
+  </div>
+  <button class="apply-btn" onclick="searchRooms()">Apply</button>
+</aside>
+
+<!-- Room Cards Container -->
+<section class="container" id="roomContainer"></section>
+
+<!-- Footer -->
+<footer class="bottom-bar">
+  <p>&copy; 2025 Rent Space. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms</a>
+    <a href="#">Support</a>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+const roomData = [
+  { name: "Ashoka Garden", price: 3200, images: ["./properties/R1.jpg"], desc: "1 Room, 1 Bathroom, No Balcony" },
+  { name: "Anand Nagar", price: 2800, images: ["./properties/ro1.jpg"], desc: "3 Bedrooms, 4 Bathrooms, 3+ Balconies with Servant Room" },
+  { name: "Piplani", price: 3700, images: ["./properties/rr1.jpg"], desc: "1 Bedroom, 1 Bathroom, 2 Balconies" },
+  { name: "Alpha2", price: 7200, images: ["./properties/rr2.jpg"], desc: "3 Bedrooms, 1 Bathroom, 2 Balconies" },
+  { name: "Delta 1", price: 1700, images: ["./properties/rr3.jpg"], desc: "2 Bedrooms, 2 Bathrooms, 1 Balcony" },
+  { name: "MP Nagar", price: 4200, images: ["./properties/rrr1.jpg"], desc: "3 Bedrooms, 1 Bathroom, 1 Balcony" }
+];
+
+function loadRooms() {
+  const container = document.getElementById("roomContainer");
+  container.innerHTML = "";
+  roomData.forEach(room => {
+    const card = document.createElement("div");
+    card.className = "room-card fade-in";
+    card.setAttribute("data-name", room.name);
+    card.setAttribute("data-price", room.price);
+    card.innerHTML = `
+      <div class="slider"><img src="${room.images[0]}" alt="Room image"></div>
+      <div class="room-details">
+        <h3>${room.name}</h3>
+        <p class="price">₹${room.price.toLocaleString()} per month</p>
+        <p class="desc">${room.desc}</p>
+        <a href="payment.html" class="view-more-btn">View Details</a>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+  $(".slider").slick({
+    dots: true,
+    arrows: false,
+    autoplay: true,
+    autoplaySpeed: 2000,
+  });
+}
+
+function searchRooms() {
+  const searchVal = document.getElementById("searchInput").value.toUpperCase();
+  const cards = document.getElementsByClassName("room-card");
+  for (let card of cards) {
+    const name = card.getAttribute('data-name') || "";
+    card.style.display = name.toUpperCase().includes(searchVal) ? "" : "none";
+  }
+}
+
+function sortRooms() {
+  const sortValue = document.getElementById("sortBy").value;
+  const container = document.getElementById("roomContainer");
+  const cards = Array.from(container.getElementsByClassName("room-card"));
+  if (sortValue === "lowToHigh") {
+    cards.sort((a, b) => a.dataset.price - b.dataset.price);
+  } else if (sortValue === "highToLow") {
+    cards.sort((a, b) => b.dataset.price - a.dataset.price);
+  }
+  cards.forEach(card => container.appendChild(card));
+}
+
+document.getElementById("sortToggleBtn").addEventListener("click", () => {
+  const section = document.getElementById("sortSection");
+  section.style.display = section.style.display === "none" ? "block" : "none";
+});
+
+document.getElementById("filterToggleBtn").addEventListener("click", () => {
+  const sidebar = document.getElementById("filterSidebar");
+  sidebar.style.display = sidebar.style.display === "none" ? "block" : "none";
+});
+
+window.onload = loadRooms;
+</script>
+</body>
+</html>

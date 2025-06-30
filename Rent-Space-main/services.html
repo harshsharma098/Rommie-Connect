@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Services | RoomieConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #f4f4f4;
+      color: #333;
+      padding: 2rem 1rem;
+    }
+
+    .section {
+      max-width: 1200px;
+      margin: auto;
+      text-align: center;
+    }
+
+    .title h1 {
+      font-size: 42px;
+      color: #4CAF50;
+      margin-bottom: 1rem;
+      animation: fadeInDown 0.8s ease-in-out;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .card {
+      background-color: #ffffff;
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease-in-out;
+      animation: fadeInUp 0.6s ease both;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background-color: #e6f5ea;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+      font-size: 40px;
+      color: #4CAF50;
+      margin-bottom: 1rem;
+    }
+
+    .card h2 {
+      font-size: 24px;
+      color: #222;
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      font-size: 16px;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      max-height: 120px;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+
+    .card.expanded p {
+      max-height: 1000px;
+    }
+
+    .button {
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .button:hover {
+      background-color: #388e3c;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .title h1 {
+        font-size: 32px;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="title">
+      <h1>Our Services</h1>
+    </div>
+
+    <div class="services">
+      <div class="card">
+        <div class="icon">
+          <i class="fa-solid fa-magnifying-glass-location"></i>
+        </div>
+        <h2>Room Discovery</h2>
+        <p>
+          Discover rooms tailored to your lifestyle and budget. Our platform uses intelligent filters and an intuitive design to simplify the room hunting process. View verified listings, check detailed amenities, and get connected instantly with landlords.
+        </p>
+        <span class="button" onclick="toggleContent(this)">Read More</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <i class="fa-solid fa-rectangle-ad"></i>
+        </div>
+        <h2>Advertise Property</h2>
+        <p>
+          Reach thousands of potential renters by showcasing your rental property with us. Add photos, set your terms, and manage inquiries from your dashboard. We ensure your listing gets maximum visibility with minimal effort.
+        </p>
+        <span class="button" onclick="toggleContent(this)">Read More</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">
+          <i class="fa-solid fa-message"></i>
+        </div>
+        <h2>Integrated Messaging</h2>
+        <p>
+          Communicate directly and securely within our platform. Our chat system allows instant messaging with prospective roommates or landlords, helping you clarify doubts, set up meetings, and finalize agreements in real-time.
+        </p>
+        <span class="button" onclick="toggleContent(this)">Read More</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleContent(btn) {
+      const card = btn.closest('.card');
+      card.classList.toggle('expanded');
+      btn.textContent = card.classList.contains('expanded') ? 'Read Less' : 'Read More';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | RoomieConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+
+    body {
+      background: #f4f4f4;
+      display: flex; align-items: center; justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      width: 100%; max-width: 420px;
+      padding: 2rem;
+      border-radius: 24px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .toggle-buttons {
+      display: flex;
+      margin-bottom: 1.5rem;
+      gap: 10px;
+    }
+    .toggle-buttons button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #e0e0e0;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .toggle-buttons .active {
+      background: #4CAF50;
+      color: white;
+    }
+
+    form {
+      display: none;
+      flex-direction: column;
+    }
+    form.active-form {
+      display: flex;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: #4CAF50;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px 12px 42px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: all 0.3s;
+    }
+    .input-group input:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+      outline: none;
+    }
+
+    .btn {
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #388e3c;
+    }
+
+    .switch-form {
+      text-align: center;
+      margin-top: 1rem;
+      color: #555;
+    }
+    .switch-form span {
+      color: #4CAF50;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="toggle-buttons">
+    <button id="showLogin" class="active">Login</button>
+    <button id="showSignup">Sign up</button>
+  </div>
+
+  <form id="loginForm" class="active-form">
+    <h2>Welcome Back</h2>
+    <div class="input-group"><i class="fa-solid fa-user"></i><input id="loginUser" type="text" placeholder="Email or Mobile" required /></div>
+    <div class="input-group"><i class="fa-solid fa-lock"></i><input id="loginPass" type="password" placeholder="Password" required /></div>
+    <button class="btn" type="submit">Login</button>
+    <p class="switch-form">Forgot Password? <span id="linkForgot">Reset here</span></p>
+    <p class="switch-form">New here? <span id="linkSignup">Create Account</span></p>
+  </form>
+
+  <form id="signupForm">
+    <h2>Create Account</h2>
+    <div class="input-group"><i class="fa-solid fa-user"></i><input id="signupName" placeholder="Full name" required></div>
+    <div class="input-group"><i class="fa-solid fa-envelope"></i><input id="signupEmail" placeholder="Email" required></div>
+    <div class="input-group"><i class="fa-solid fa-phone"></i><input id="signupPhone" placeholder="Mobile (10 digits)" required></div>
+    <div class="input-group"><i class="fa-solid fa-lock"></i><input id="signupPass" placeholder="Create password" type="password" required></div>
+    <button class="btn" type="submit">Sign Up</button>
+    <p class="switch-form">Already have an account? <span id="linkLogin">Login</span></p>
+  </form>
+
+  <form id="forgotForm">
+    <h2>Reset Password</h2>
+    <div class="input-group"><i class="fa-solid fa-phone"></i><input id="forgotPhone" placeholder="Enter your Mobile" required></div>
+    <button class="btn" type="submit">Send OTP</button>
+    <p class="switch-form">Back to <span id="linkBackLogin">Login</span></p>
+  </form>
+</div>
+<script>
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const forgotForm = document.getElementById("forgotForm");
+  const showLogin = document.getElementById("showLogin");
+  const showSignup = document.getElementById("showSignup");
+
+  const switchForms = (type) => {
+    loginForm.classList.remove("active-form");
+    signupForm.classList.remove("active-form");
+    forgotForm.classList.remove("active-form");
+
+    showLogin.classList.remove("active");
+    showSignup.classList.remove("active");
+
+    if (type === "login") {
+      loginForm.classList.add("active-form");
+      showLogin.classList.add("active");
+    }
+    if (type === "signup") {
+      signupForm.classList.add("active-form");
+      showSignup.classList.add("active");
+    }
+    if (type === "forgot") {
+      forgotForm.classList.add("active-form");
+    }
+  };
+
+  showLogin.onclick = () => switchForms("login");
+  showSignup.onclick = () => switchForms("signup");
+  document.getElementById("linkSignup").onclick = () => switchForms("signup");
+  document.getElementById("linkLogin").onclick = () => switchForms("login");
+  document.getElementById("linkForgot").onclick = () => switchForms("forgot");
+  document.getElementById("linkBackLogin").onclick = () => switchForms("login");
+
+  loginForm.onsubmit = e => {
+    e.preventDefault();
+    const user = document.getElementById("loginUser").value;
+    const pass = document.getElementById("loginPass").value;
+    if (!user || !pass) return alert("Please fill credentials");
+    alert("Login successful 🎉");
+    window.location.href = "home.html";
+  };
+
+  signupForm.onsubmit = e => {
+    e.preventDefault();
+    const phone = document.getElementById("signupPhone").value;
+    if (!/^\d{10}$/.test(phone)) return alert("Mobile must be 10 digits");
+    alert("Account created 🎉");
+  };
+
+  forgotForm.onsubmit = e => {
+    e.preventDefault();
+    const phone = document.getElementById("forgotPhone").value;
+    if (!/^\d{10}$/.test(phone)) return alert("Mobile must be 10 digits");
+    alert(`OTP sent to ${phone}`);
+  };
+</script>
+</body>
+</html>

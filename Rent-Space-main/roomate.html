@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find a Roommate | RoomieConnect</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    body {
+      background: #f4f4f4;
+      color: #333;
+      padding: 2rem 1rem;
+    }
+
+    .section {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .title h1 {
+      font-size: 42px;
+      color: #4CAF50;
+      animation: fadeInDown 0.8s ease-in-out;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .filters select, .filters input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      min-width: 180px;
+    }
+
+    .results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .profile-card {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+      background: #e6f5ea;
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 180px;
+      background-color: #ddd;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .profile-info h3 {
+      color: #222;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-info p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-connect {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      text-decoration: none;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      margin-top: 0.8rem;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-connect:hover {
+      background-color: #388e3c;
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="title">
+      <h1>Find a Roommate Near You</h1>
+    </div>
+
+    <div class="filters">
+      <select id="locationFilter">
+        <option value="">All Locations</option>
+        <option value="Delhi">Delhi</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Chennai">Chennai</option>
+      </select>
+      <select id="genderFilter">
+        <option value="">All Genders</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <input type="text" id="interestSearch" placeholder="Search by interest...">
+    </div>
+    <div class="results" id="resultsContainer">
+    </div>
+  </div>
+
+  <script>
+    const profiles = [
+      { name: "Harsh Sharma", gender: "Male", location: "Delhi", profession: "Student, Sharda University", interest: "Gym, Gaming, Music", looking: "Shared flat near Alpha 2", img: "./properties/harsh.jpg" },
+      { name: "Rishita", gender: "Female", location: "Mumbai", profession: "Working Professional", interest: "Yoga, Travel", looking: "Roommate for 2BHK near Andheri", img: "./properties/rishita.jpg" },
+      { name: "Aman Dogra", gender: "Male", location: "Delhi", profession: "Software Engineer", interest: "Coding, Fitness", looking: "Flatmate for a 3BHK in Whitefield", img: "./properties/aman.jpg" },
+      { name: "Khyati Gupta", gender: "Female", location: "Chennai", profession: "Designer", interest: "Art, Pets", looking: "Female flatmate near Adyar", img: "/properties/khyati.jpg" },
+      { name: "Priyanshu Mishra", gender: "Male", location: "Delhi", profession: "CA Intern", interest: "Finance, Chess", looking: "Looking for quiet study space", img: "/properties/priyanshy.jpg" },
+      { name: "Shreya Juyal", gender: "Female", location: "Mumbai", profession: "Actor", interest: "Movies, Dance", looking: "Near Bandra, safe society", img: "/properties/shreya.jpg" },
+      { name: "Shivam Sharma", gender: "Male", location: "Bangalore", profession: "HR Executive", interest: "Books, Meditation", looking: "Professional roommate near Koramangala", img: "./properties/Shivam.jpg" },
+      { name: "Aditi Gupta", gender: "Female", location: "Chennai", profession: "Law Student", interest: "Debate, Coffee", looking: "Close to college campus", img: "https://randomuser.me/api/portraits/women/8.jpg" },
+      { name: "Nakul Sharma", gender: "Male", location: "Mumbai", profession: "Intern at TCS", interest: "Cricket, Coding", looking: "Affordable place near Thane", img: "./properties/nakul.jpg" },
+      { name: "Disha Sharma", gender: "Female", location: "Delhi", profession: "MBA Student", interest: "Startup, Fitness", looking: "Seeking female roommate in South Delhi", img: "https://randomuser.me/api/portraits/women/10.jpg" }
+    ];
+
+    const resultsContainer = document.getElementById("resultsContainer");
+
+    function renderProfiles(data) {
+      resultsContainer.innerHTML = "";
+      data.forEach(profile => {
+        const card = document.createElement("div");
+        card.className = "profile-card";
+        card.innerHTML = `
+          <div class="profile-img" style="background-image: url('${profile.img}')"></div>
+          <div class="profile-info">
+            <h3>${profile.name}</h3>
+            <p>Location: ${profile.location}</p>
+            <p>Profession: ${profile.profession}</p>
+            <p>Looking for: ${profile.looking}</p>
+            <a href="chatbox.html" class="btn-connect">Connect</a>
+          </div>
+        `;
+        resultsContainer.appendChild(card);
+      });
+    }
+
+    function applyFilters() {
+      const loc = document.getElementById("locationFilter").value.toLowerCase();
+      const gender = document.getElementById("genderFilter").value.toLowerCase();
+      const interest = document.getElementById("interestSearch").value.toLowerCase();
+
+      const filtered = profiles.filter(p =>
+        (!loc || p.location.toLowerCase().includes(loc)) &&
+        (!gender || p.gender.toLowerCase() === gender) &&
+        (!interest || p.interest.toLowerCase().includes(interest))
+      );
+
+      renderProfiles(filtered);
+    }
+
+    document.getElementById("locationFilter").addEventListener("change", applyFilters);
+    document.getElementById("genderFilter").addEventListener("change", applyFilters);
+    document.getElementById("interestSearch").addEventListener("input", applyFilters);
+
+    // Initial render
+    renderProfiles(profiles);
+  </script>
+</body>
+</html>
